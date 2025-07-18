@@ -2,7 +2,7 @@ import streamlit as st
 import joblib
 import numpy as np
 
-model = joblib.load('linear_model.pkl')
+model = joblib.load('poly_model.pkl')
 
 st.title("Cafe Sales Predictor")
 
