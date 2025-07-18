@@ -2,25 +2,25 @@ import streamlit as st
 import joblib
 import numpy as np
 
-model = joblib.load('poly_model.pkl')
+# Load the trained model and polynomial feature transformer
+model = joblib.load("polynomial_model.pkl")
+poly = joblib.load("poly_transformer.pkl")
 
-st.title("Cafe Sales Predictor")
+st.set_page_config(page_title="Cafe Total Spent Predictor", layout="centered")
 
-st.markdown("Enter the transaction details below:")
+st.title("Cafe Total Spent Predictor")
 
-item = st.selectbox("Item", ["Cake","Smoothie","Coffee","Salad","Cookie","Tea","Juice","Sandwich"])
-units_sold = st.number_input("Units Sold", min_value=1, value=1)
-payment_method = st.selectbox("Payment Method", ["Cash", "Card", "UPI"])
-day_of_week = st.selectbox("Day of Week", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
-promo = st.radio("Promo Applied?", ["Yes", "No"])
+st.markdown("Enter the order details below:")
 
-item_map = {"Coffee": 0, "Tea": 1, "Sandwich": 2, "Cake": 3}
-payment_map = {"Cash": 0, "Card": 1, "UPI": 2}
-day_map = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5, "Sunday": 6}
-promo_map = {"No": 0, "Yes": 1}
+# User Inputs
+price_per_unit = st.number_input("Price Per Unit (₹)", value=50.0)
+quantity = st.number_input("Quantity", value=2)
+day = st.number_input("Day of Month", min_value=1, max_value=31, value=15)
+month = st.number_input("Month (1-12)", min_value=1, max_value=12, value=7)
 
-features = np.array([[item_map[item], units_sold, payment_map[payment_method], day_map[day_of_week], promo_map[promo]]])
-
-if st.button("Predict"):
-    prediction = model.predict(features)[0]
-    st.success(f"Estimated Total Spent: ₹{prediction:.2f}")
+# When user clicks the predict button
+if st.button("Predict Total Spent"):
+    input_data = np.array([[price_per_unit, quantity, day, month]])
+    input_poly = poly.transform(input_data)
+    prediction = model.predict(input_poly)[0]
+    st.success(f"✅ Predicted Total Spent: ₹{prediction:.2f}")
