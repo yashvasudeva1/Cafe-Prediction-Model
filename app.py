@@ -151,53 +151,7 @@ with col2:
             value=f"{r2:.4f}"
         )
 
-# Visualization section
-st.header("Model Visualization")
 
-# Create tabs for different visualizations
-tab1, tab2, tab3 = st.tabs(["Actual vs Predicted", "Residual Plot", "Feature Importance"])
-
-with tab1:
-    # Actual vs Predicted scatter plot
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.scatter(ytest, predicted, alpha=0.6, color='blue', label='Predictions')
-    
-    # Add perfect prediction line
-    min_val = min(min(ytest), min(predicted))
-    max_val = max(max(ytest), max(predicted))
-    ax.plot([min_val, max_val], [min_val, max_val], 'r--', label='Perfect Prediction')
-    
-    ax.set_xlabel('Actual Total Spent')
-    ax.set_ylabel('Predicted Total Spent')
-    ax.set_title('Actual vs Predicted Values')
-    ax.legend()
-    ax.grid(True, alpha=0.3)
-    st.pyplot(fig)
-
-with tab2:
-    # Residual plot
-    residuals = ytest - predicted
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.scatter(predicted, residuals, alpha=0.6, color='green')
-    ax.axhline(y=0, color='red', linestyle='--', label='Zero Residual')
-    
-    ax.set_xlabel('Predicted Total Spent')
-    ax.set_ylabel('Residuals')
-    ax.set_title('Residual Plot')
-    ax.legend()
-    ax.grid(True, alpha=0.3)
-    st.pyplot(fig)
-
-with tab3:
-    # Feature importance (coefficients)
-    feature_names = poly_features.get_feature_names_out(['Price Per Unit', 'Quantity', 'Day', 'Month'])
-    coefficients = model.coef_
-    
-    # Show only top 10 features to avoid clutter
-    top_indices = np.argsort(np.abs(coefficients))[-10:]
-    top_features = [feature_names[i] for i in top_indices]
-    top_coeffs = coefficients[top_indices]
-    
 
     
    
