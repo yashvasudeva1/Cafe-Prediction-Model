@@ -10,7 +10,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 st.set_page_config(page_title="Polynomial Regression Predictor", layout="wide")
 
 # Title and description
-st.title("🔮 Polynomial Regression Predictor")
+st.title("Polynomial Regression Predictor")
 st.markdown("Predict total spending based on item selection and other factors")
 
 # Item and price mapping
@@ -29,7 +29,7 @@ test_size = st.sidebar.slider("Test Size", min_value=0.1, max_value=0.4, value=0
 col1, col2 = st.columns([1, 1])
 
 with col1:
-    st.header("📊 Input Parameters")
+    st.header("Input Parameters")
     
     # Item selection dropdown
     selected_item = st.selectbox(
@@ -74,7 +74,7 @@ with col1:
     )
 
 with col2:
-    st.header("🎯 Prediction Results")
+    st.header("Prediction Results")
     
     # Create sample data for demonstration (you would replace this with your actual DataFrame)
     @st.cache_data
@@ -152,7 +152,7 @@ with col2:
         )
 
 # Visualization section
-st.header("📈 Model Visualization")
+st.header("Model Visualization")
 
 # Create tabs for different visualizations
 tab1, tab2, tab3 = st.tabs(["Actual vs Predicted", "Residual Plot", "Feature Importance"])
@@ -198,30 +198,6 @@ with tab3:
     top_features = [feature_names[i] for i in top_indices]
     top_coeffs = coefficients[top_indices]
     
-    fig, ax = plt.subplots(figsize=(10, 6))
-    bars = ax.barh(top_features, top_coeffs, color='purple', alpha=0.7)
-    ax.set_xlabel('Coefficient Value')
-    ax.set_ylabel('Features')
-    ax.set_title('Top 10 Feature Coefficients (Polynomial Features)')
-    ax.grid(True, alpha=0.3)
-    
-    # Add value labels on bars
-    for i, (bar, coeff) in enumerate(zip(bars, top_coeffs)):
-        ax.text(coeff + (max(top_coeffs) - min(top_coeffs)) * 0.01, 
-                i, f'{coeff:.2f}', va='center', fontsize=8)
-    
-    plt.tight_layout()
-    st.pyplot(fig)
 
-# Data preview section
-st.header("📋 Data Preview")
-if st.checkbox("Show sample data"):
-    st.dataframe(df.head(10))
     
-    # Basic statistics
-    st.subheader("Data Statistics")
-    st.dataframe(df.describe())
-
-# Footer
-st.markdown("---")
-st.markdown("Built with ❤️ using Streamlit")
+   
