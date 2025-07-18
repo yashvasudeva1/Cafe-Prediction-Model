@@ -8,7 +8,7 @@ st.title("Cafe Sales Predictor")
 
 st.markdown("Enter the transaction details below:")
 
-item = st.selectbox("Item", ["Coffee", "Tea", "Sandwich", "Cake"])
+item = st.selectbox("Item", ["Cake","Smoothie","Coffee","Salad","Cookie","Tea","Juice","Sandwich"])
 units_sold = st.number_input("Units Sold", min_value=1, value=1)
 payment_method = st.selectbox("Payment Method", ["Cash", "Card", "UPI"])
 day_of_week = st.selectbox("Day of Week", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
