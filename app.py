@@ -5,8 +5,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
-import plotly.graph_objects as go
-import plotly.express as px
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Set page configuration
 st.set_page_config(page_title="Polynomial Regression Predictor", layout="wide")
@@ -161,54 +161,34 @@ tab1, tab2, tab3 = st.tabs(["Actual vs Predicted", "Residual Plot", "Feature Imp
 
 with tab1:
     # Actual vs Predicted scatter plot
-    fig_scatter = go.Figure()
-    fig_scatter.add_trace(go.Scatter(
-        x=ytest,
-        y=predicted,
-        mode='markers',
-        name='Predictions',
-        marker=dict(color='blue', alpha=0.6)
-    ))
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.scatter(ytest, predicted, alpha=0.6, color='blue', label='Predictions')
     
     # Add perfect prediction line
     min_val = min(min(ytest), min(predicted))
     max_val = max(max(ytest), max(predicted))
-    fig_scatter.add_trace(go.Scatter(
-        x=[min_val, max_val],
-        y=[min_val, max_val],
-        mode='lines',
-        name='Perfect Prediction',
-        line=dict(color='red', dash='dash')
-    ))
+    ax.plot([min_val, max_val], [min_val, max_val], 'r--', label='Perfect Prediction')
     
-    fig_scatter.update_layout(
-        title='Actual vs Predicted Values',
-        xaxis_title='Actual Total Spent',
-        yaxis_title='Predicted Total Spent',
-        height=500
-    )
-    st.plotly_chart(fig_scatter, use_container_width=True)
+    ax.set_xlabel('Actual Total Spent')
+    ax.set_ylabel('Predicted Total Spent')
+    ax.set_title('Actual vs Predicted Values')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    st.pyplot(fig)
 
 with tab2:
     # Residual plot
     residuals = ytest - predicted
-    fig_residual = go.Figure()
-    fig_residual.add_trace(go.Scatter(
-        x=predicted,
-        y=residuals,
-        mode='markers',
-        name='Residuals',
-        marker=dict(color='green', alpha=0.6)
-    ))
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.scatter(predicted, residuals, alpha=0.6, color='green')
+    ax.axhline(y=0, color='red', linestyle='--', label='Zero Residual')
     
-    fig_residual.add_hline(y=0, line_dash="dash", line_color="red")
-    fig_residual.update_layout(
-        title='Residual Plot',
-        xaxis_title='Predicted Total Spent',
-        yaxis_title='Residuals',
-        height=500
-    )
-    st.plotly_chart(fig_residual, use_container_width=True)
+    ax.set_xlabel('Predicted Total Spent')
+    ax.set_ylabel('Residuals')
+    ax.set_title('Residual Plot')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    st.pyplot(fig)
 
 with tab3:
     # Feature importance (coefficients)
@@ -220,21 +200,20 @@ with tab3:
     top_features = [feature_names[i] for i in top_indices]
     top_coeffs = coefficients[top_indices]
     
-    fig_importance = go.Figure()
-    fig_importance.add_trace(go.Bar(
-        x=top_coeffs,
-        y=top_features,
-        orientation='h',
-        marker=dict(color='purple')
-    ))
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bars = ax.barh(top_features, top_coeffs, color='purple', alpha=0.7)
+    ax.set_xlabel('Coefficient Value')
+    ax.set_ylabel('Features')
+    ax.set_title('Top 10 Feature Coefficients (Polynomial Features)')
+    ax.grid(True, alpha=0.3)
     
-    fig_importance.update_layout(
-        title='Top 10 Feature Coefficients (Polynomial Features)',
-        xaxis_title='Coefficient Value',
-        yaxis_title='Features',
-        height=500
-    )
-    st.plotly_chart(fig_importance, use_container_width=True)
+    # Add value labels on bars
+    for i, (bar, coeff) in enumerate(zip(bars, top_coeffs)):
+        ax.text(coeff + (max(top_coeffs) - min(top_coeffs)) * 0.01, 
+                i, f'{coeff:.2f}', va='center', fontsize=8)
+    
+    plt.tight_layout()
+    st.pyplot(fig)
 
 # Data preview section
 st.header("📋 Data Preview")
