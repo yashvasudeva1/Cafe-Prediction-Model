@@ -17,17 +17,16 @@ prices = [2.0, 3.0, 1.0, 5.0, 4.0, 1.5, 0.0, 2.5]
 # Create price mapping dictionary
 price_mapping = dict(zip(items, prices))
 
-# Sidebar (Optional Info)
+# Sidebar
 st.sidebar.header("Model Info")
-st.sidebar.info("Model and transformer loaded from uploaded `.pkl` files.")
+st.sidebar.info("Model and transformer loaded from local `.pkl` files.")
 
-# Input and Output Columns
+# Layout
 col1, col2 = st.columns([1, 1])
 
 with col1:
     st.header("Input Parameters")
 
-    # Item selection
     selected_item = st.selectbox("Select Item", options=items)
     price_per_unit = price_mapping[selected_item]
 
@@ -41,8 +40,8 @@ with col2:
 
     @st.cache_resource
     def load_model_and_transformer():
-        model = joblib.load("/mnt/data/polynomial_model.pkl")
-        transformer = joblib.load("/mnt/data/poly_features.pkl")
+        model = joblib.load("polynomial_model.pkl")        # Changed path
+        transformer = joblib.load("poly_features.pkl")     # Changed path
         return model, transformer
 
     try:
@@ -56,8 +55,7 @@ with col2:
         st.metric(label="Predicted Spending", value=f"${prediction:.2f}", delta=f"Item: {selected_item}")
 
         st.subheader("Model Performance")
-        st.info("Pretrained model loaded — performance metrics are not shown in this demo.")
+        st.info("Pretrained model loaded — performance metrics are not shown in this version.")
 
     except Exception as e:
         st.error(f"Error during prediction: {e}")
-
