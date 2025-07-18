@@ -15,7 +15,7 @@ st.markdown("Predict total spending based on item selection and other factors")
 
 # Item and price mapping
 items = ['Coffee', 'Cake', 'Cookie', 'Salad', 'Smoothie', 'Sandwich', 'Tea', 'Juice']
-prices = [2.0, 3.0, 1.0, 5.0, 4.0, 1.5, 0.0]  # Note: Last price missing, using 0.0 as placeholder
+prices = [2.0, 3.0, 1.0, 5.0, 4.0, 1.5, 0.0, 2.5]  # Added price for Juice
 
 # Create price mapping dictionary
 price_mapping = dict(zip(items, prices))
@@ -86,7 +86,7 @@ with col2:
         sample_data = []
         for _ in range(n_samples):
             item = np.random.choice(items)
-            price = price_mapping[item]
+            price = price_mapping.get(item, 2.0)  # Use .get() with default value
             qty = np.random.randint(1, 10)
             d = np.random.randint(1, 32)
             m = np.random.randint(1, 13)
