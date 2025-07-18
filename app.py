@@ -76,7 +76,25 @@ with col1:
 with col2:
     st.header("Prediction Results")
     
-    
+    # Create sample data for demonstration (you would replace this with your actual DataFrame)
+    @st.cache_data
+    def create_sample_data():
+        np.random.seed(42)
+        n_samples = 1000
+        
+        # Generate sample data
+        sample_data = []
+        for _ in range(n_samples):
+            item = np.random.choice(items)
+            price = price_mapping.get(item, 2.0)  # Use .get() with default value
+            qty = np.random.randint(1, 10)
+            d = np.random.randint(1, 32)
+            m = np.random.randint(1, 13)
+            # Create some correlation for total spent
+            total = price * qty + np.random.normal(0, 1)
+            sample_data.append([item, price, qty, d, m, total])
+        
+        return pd.DataFrame(sample_data, columns=['Item', 'Price Per Unit', 'Quantity', 'Day', 'Month', 'Total Spent'])
     
     # Load or create data
     df = create_sample_data()
@@ -112,7 +130,7 @@ with col2:
     
     # Display prediction
     st.metric(
-        label="Predicted Total Spent",
+        label="Predicted Profit",
         value=f"${prediction:.2f}",
         delta=f"Item: {selected_item}"
     )
